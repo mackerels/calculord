@@ -1,0 +1,10 @@
+Calculord.sdf
+Release
+.vs/
+CalcuLord.NET/bin/
+CalcuLord.NET/obj/
+CalcuLord.NET.Tests/bin/
+CalcuLord.NET.Tests/obj/
+Calculord/Release/
+Calculord/Debug/
+packages/
