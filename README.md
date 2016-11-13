@@ -1,2 +1,2 @@
 # calculord
-Irregular calculator ¯\_(ツ)_/¯
+Irregular calculator ¯\\_(ツ)_/¯
