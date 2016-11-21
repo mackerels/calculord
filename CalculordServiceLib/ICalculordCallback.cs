@@ -11,6 +11,9 @@ namespace CalculordServiceLib
         void Equals(double result);
 
         [OperationContract(IsOneWay = true)]
-        void Reject();
+        void Reject(string msg);
+
+        [OperationContract(IsOneWay = true)]
+        void GetChumak(string img);
     }
 }

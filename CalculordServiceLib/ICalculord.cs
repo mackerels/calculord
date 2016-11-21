@@ -10,6 +10,6 @@ namespace CalculordServiceLib
         void SetConnection(string id);
 
         [OperationContract(IsOneWay = true)]
-        void Calculate(string input);
+        void Calculate(string input, string id);
     }
 }

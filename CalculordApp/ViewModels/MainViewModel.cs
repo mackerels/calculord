@@ -1,27 +1,30 @@
-using CalculordApp.CalculordServiceReference;
+using CalculordApp.Model;
 using Caliburn.Micro;
 using MahApps.Metro.Controls.Dialogs;
-using System;
 using System.Configuration;
 using System.Globalization;
-using System.ServiceModel;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace CalculordApp.ViewModels
 {
-    public class MainViewModel : PropertyChangedBase, IMain, ICalculordCallback, IDisposable
+    public class MainViewModel : PropertyChangedBase, IMain
     {
-        private static CalculordClient _proxy;
         private IDialogCoordinator _dialogService;
         private string _mathExpression;
 
         public MainViewModel(IDialogCoordinator dialogService)
         {
             _dialogService = dialogService;
-            _proxy = new CalculordClient(new InstanceContext(this));
-            ConfigurationManager.AppSettings["ClientId"] = ""; //use for test, create new client
+
+            CalculordModel.Instance.AuthorizationConfirmed += SetConfiguration;
+            CalculordModel.Instance.ResultReceived += ShowResult;
+            CalculordModel.Instance.CalculationRejected += CancelCalculation;
+            CalculordModel.Instance.ChumakReceived += ShowChumak;
+
+            //ConfigurationManager.AppSettings["ClientId"] = ""; //use for test, create new client
         }
 
         public string MathExpression
@@ -34,14 +37,40 @@ namespace CalculordApp.ViewModels
             }
         }
 
-        protected async Task WaitForConnection()
+        private void SetConfiguration(string id)
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings["ClientId"].Value = id;
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
+
+        private void ShowResult(double result)
+        {
+            MathExpression = result.ToString(new CultureInfo("en-US"));
+        }
+
+        private async void CancelCalculation(string msg)
+        {
+            await _dialogService.ShowMessageAsync(this, "ERROR", msg);
+           
+            await Application.Current.Dispatcher.BeginInvoke(
+                DispatcherPriority.Background, new System.Action(ShutdownApplication));
+        }
+
+        private void ShowChumak(string img)
+        {
+
+        }
+
+        private async Task WaitForConnection()
         {
             var ProgressAlert = await _dialogService.ShowProgressAsync(this, "LOADING", "Please wait...");
             ProgressAlert.SetIndeterminate(); 
 
             try
             {
-               await Task.Run(() => _proxy.SetConnection(ConfigurationManager.AppSettings["ClientId"]));
+               await Task.Run(() => CalculordModel.Instance.SetConnection(ConfigurationManager.AppSettings["ClientId"]));
                await ProgressAlert.CloseAsync();
                await _dialogService.ShowMessageAsync(this, "HELLO!", "Welcome to Calculord Service!");
             }
@@ -59,9 +88,14 @@ namespace CalculordApp.ViewModels
                 }
                 else
                 {
-                    Application.Current.Shutdown();
+                    ShutdownApplication();
                 }
             }
+        }
+
+        private void ShutdownApplication()
+        {
+            Application.Current.Shutdown();
         }
 
         public async void SetConnection()
@@ -95,36 +129,12 @@ namespace CalculordApp.ViewModels
             if (!string.IsNullOrEmpty(MathExpression) 
                 && regex.IsMatch(MathExpression))
             {
-                _proxy = new CalculordClient(new InstanceContext(this));
-                _proxy.Calculate(MathExpression);
+                CalculordModel.Instance.Calculate(MathExpression, ConfigurationManager.AppSettings["ClientId"]);
             }
             else
             {
                 await _dialogService.ShowMessageAsync(this, "ERROR", "Invalid input!");
             }
-        }
-
-        public void Authorize(string id)
-        {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            config.AppSettings.Settings["ClientId"].Value = id;
-            config.Save(ConfigurationSaveMode.Modified);
-            ConfigurationManager.RefreshSection("appSettings");
-        }
-
-        public void Equals(double result)
-        {
-            MathExpression = result.ToString(new CultureInfo("en-US"));
-        }
-
-        public void Reject()
-        {
-            _dialogService.ShowMessageAsync(this, "ERROR", "Your calculation limit reached! Please buy a license!");
-        }
-
-        public void Dispose()
-        {
-            _proxy.Close();
         }
     }
 }

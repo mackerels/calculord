@@ -9,62 +9,71 @@ namespace CalculordServiceLib
     public class CalculordService : ICalculord
     {
         public static readonly int CalculationLimit = 5; 
-        private static readonly CalculordContext _context = new CalculordContext();
-        private static User _client;
         private readonly CalcuLord.NET.CalcuLord _calculator;
-        private readonly ICalculordCallback _callback = null;
        
         public CalculordService()
         {
             _calculator = new CalcuLord.NET.CalcuLord();
-            _callback = OperationContext.Current.GetCallbackChannel<ICalculordCallback>();
+        }
+
+        private ICalculordCallback CallBack
+        {
+            get { return OperationContext.Current.GetCallbackChannel<ICalculordCallback>(); }
         }
 
         public void SetConnection(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            using (var context = new CalculordContext())
             {
-                _client = new User();
-               
-                do
+                if (string.IsNullOrEmpty(id))
                 {
-                    _client.Identifier = Guid.NewGuid().ToString();
-                } while (_context.Users.Any(u => u.Identifier == _client.Identifier));
+                    string identifier;
 
-                _client.CalculationLimit = CalculationLimit;
-                _context.Users.Add(_client);
-                 _context.SaveChanges();
-                    
-                _callback.Authorize(_client.Identifier);
-            }
-            else
-            {
-                _client = _context.Users.Where(u => u.Identifier == id).First();
+                    do
+                    {
+                        identifier = Guid.NewGuid().ToString();
+                    } while (context.Users.Any(u => u.Identifier == identifier));
 
+                    context.Users.Add(new User { Identifier = identifier, CalculationLimit = CalculationLimit });
+                    context.SaveChanges();
+                    CallBack.Authorize(identifier);
+
+                    Console.WriteLine(identifier);
+                }
+                else
+                {
+                    if(!context.Users.Any(u => u.Identifier == id))
+                    {
+                        CallBack.Reject("You are a cheater! Please be fair!");
+                    }
+                }
             }
         }
 
-        public void Calculate(string input)
+        public void Calculate(string input, string id)
         {
-            if (_client.CalculationLimit > 0)
+            using (var context = new CalculordContext())
             {
-                    
-                double result = _calculator.Calculate(input);
-                Calculation calculation = new Calculation { MathExpression = input, Result = result };
+                User client = context.Users.Where(u => u.Identifier == id).First();
 
-                _context.Calculations.Add(calculation);
-                _client.Calculations.Add(calculation);
-                _context.SaveChanges();
+                if (client.CalculationLimit > 0)
+                {
+                    double result = _calculator.Calculate(input);
+                    Calculation calculation = new Calculation { MathExpression = input, Result = result, UserId = client.Id };
 
-                _callback.Equals(result);
+                    context.Calculations.Add(calculation);
+                    context.SaveChanges();
 
-                _client.CalculationLimit--;
-                _context.SaveChanges();
-             }
-             else
-             {
-                _callback.Reject();
-             }
+                    CallBack.Equals(result);
+
+                    client.CalculationLimit--;
+                    context.SaveChanges();
+                }
+                else
+                {
+                    CallBack.Reject("Your calculation limit reached! Please buy a license!");
+                }
+            }
         }
     }
 }

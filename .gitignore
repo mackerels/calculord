@@ -16,4 +16,7 @@ CalculordServiceHost/bin/
 CalculordServiceHost/obj/
 CalculordServiceLib/bin/
 CalculordServiceLib/obj/
+Calculord.VC.VC.opendb
+Calculord.VC.db
+ipch/
 

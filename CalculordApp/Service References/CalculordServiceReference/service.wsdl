@@ -54,6 +54,9 @@
   <wsdl:message name="ICalculord_Reject_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:Reject" />
   </wsdl:message>
+  <wsdl:message name="ICalculord_GetChumak_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetChumak" />
+  </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="ICalculord">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SetConnection">
       <wsdl:input wsaw:Action="http://tempuri.org/ICalculord/SetConnection" message="tns:ICalculord_SetConnection_InputMessage" />
@@ -69,6 +72,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Reject">
       <wsdl:output wsaw:Action="http://tempuri.org/ICalculord/Reject" message="tns:ICalculord_Reject_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetChumak">
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalculord/GetChumak" message="tns:ICalculord_GetChumak_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ICalculord" type="tns:ICalculord">
@@ -101,6 +107,12 @@
     </wsdl:operation>
     <wsdl:operation name="Reject">
       <soap12:operation soapAction="http://tempuri.org/ICalculord/Reject" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChumak">
+      <soap12:operation soapAction="http://tempuri.org/ICalculord/GetChumak" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

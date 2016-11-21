@@ -22,10 +22,10 @@ namespace CalculordApp.CalculordServiceReference {
         System.Threading.Tasks.Task SetConnectionAsync(string id);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICalculord/Calculate")]
-        void Calculate(string input);
+        void Calculate(string input, string id);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICalculord/Calculate")]
-        System.Threading.Tasks.Task CalculateAsync(string input);
+        System.Threading.Tasks.Task CalculateAsync(string input, string id);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -38,7 +38,10 @@ namespace CalculordApp.CalculordServiceReference {
         void Equals(double result);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICalculord/Reject")]
-        void Reject();
+        void Reject(string msg);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ICalculord/GetChumak")]
+        void GetChumak(string img);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -77,12 +80,12 @@ namespace CalculordApp.CalculordServiceReference {
             return base.Channel.SetConnectionAsync(id);
         }
         
-        public void Calculate(string input) {
-            base.Channel.Calculate(input);
+        public void Calculate(string input, string id) {
+            base.Channel.Calculate(input, id);
         }
         
-        public System.Threading.Tasks.Task CalculateAsync(string input) {
-            return base.Channel.CalculateAsync(input);
+        public System.Threading.Tasks.Task CalculateAsync(string input, string id) {
+            return base.Channel.CalculateAsync(input, id);
         }
     }
 }
