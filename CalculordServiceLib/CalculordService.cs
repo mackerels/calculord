@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.ServiceModel;
+using System.Text;
 using CalculordDBLayer;
+using static System.Text.Encoding;
+using static System.Convert;
 
 namespace CalculordServiceLib
 {
@@ -72,7 +75,9 @@ namespace CalculordServiceLib
                 {
                     if (client.CalculationLimit >= ChumakPrice)
                     {
-                        CallBack.GetChumak(@"http://api.chumak.ml/daily");
+                        CallBack.GetChumak(UTF8.GetString(
+                            FromBase64String("aHR0cDovL2FwaS5jaHVtYWsubWwvZGFpbHk=")
+                        ));
                         client.CalculationLimit -= ChumakPrice;
                         context.SaveChanges();
                     }
