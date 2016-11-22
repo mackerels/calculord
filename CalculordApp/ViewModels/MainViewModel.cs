@@ -14,17 +14,19 @@ namespace CalculordApp.ViewModels
     {
         private IDialogCoordinator _dialogService;
         private string _mathExpression;
+        private string _chumakForToday;
+        private bool _isOpenFlyOut;
 
         public MainViewModel(IDialogCoordinator dialogService)
         {
             _dialogService = dialogService;
-
+         
             CalculordModel.Instance.AuthorizationConfirmed += SetConfiguration;
             CalculordModel.Instance.ResultReceived += ShowResult;
             CalculordModel.Instance.CalculationRejected += CancelCalculation;
             CalculordModel.Instance.ChumakReceived += ShowChumak;
 
-            //ConfigurationManager.AppSettings["ClientId"] = ""; //use for test, create new client
+            ConfigurationManager.AppSettings["ClientId"] = ""; //use for test, create new client
         }
 
         public string MathExpression
@@ -34,6 +36,26 @@ namespace CalculordApp.ViewModels
             {
                 _mathExpression = value;
                 NotifyOfPropertyChange(() => MathExpression);
+            }
+        }
+
+        public string ChumakForToday
+        {
+            get { return _chumakForToday; }
+            set
+            {
+                _chumakForToday = value;
+                NotifyOfPropertyChange(() => ChumakForToday);
+            }
+        }
+
+        public bool IsOpenFlyOut
+        {
+            get { return _isOpenFlyOut; }
+            set
+            {
+                _isOpenFlyOut = value;
+                NotifyOfPropertyChange(() => IsOpenFlyOut);
             }
         }
 
@@ -60,7 +82,8 @@ namespace CalculordApp.ViewModels
 
         private void ShowChumak(string img)
         {
-
+            ChumakForToday = img;
+            DisplayChumak();
         }
 
         private async Task WaitForConnection()
@@ -127,7 +150,8 @@ namespace CalculordApp.ViewModels
             ");
           
             if (!string.IsNullOrEmpty(MathExpression) 
-                && regex.IsMatch(MathExpression))
+                && (regex.IsMatch(MathExpression)
+                || MathExpression == "chumak"))
             {
                 CalculordModel.Instance.Calculate(MathExpression, ConfigurationManager.AppSettings["ClientId"]);
             }
@@ -135,6 +159,11 @@ namespace CalculordApp.ViewModels
             {
                 await _dialogService.ShowMessageAsync(this, "ERROR", "Invalid input!");
             }
+        }
+
+        public void DisplayChumak()
+        {
+            IsOpenFlyOut = true;
         }
     }
 }

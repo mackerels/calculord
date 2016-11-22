@@ -8,7 +8,8 @@ namespace CalculordServiceLib
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
     public class CalculordService : ICalculord
     {
-        public static readonly int CalculationLimit = 5; 
+        public static readonly int CalculationLimit = 10;
+        public static readonly int ChumakPrice = 5;
         private readonly CalcuLord.NET.CalcuLord _calculator;
        
         public CalculordService()
@@ -56,20 +57,33 @@ namespace CalculordServiceLib
             {
                 User client = context.Users.Where(u => u.Identifier == id).First();
 
-                if (client.CalculationLimit > 0)
+                if (input != "chumak")
                 {
-                    double result = _calculator.Calculate(input);
-                    Calculation calculation = new Calculation { MathExpression = input, Result = result, UserId = client.Id };
+                    if (client.CalculationLimit > 0)
+                    {
+                        double result = _calculator.Calculate(input);
+                        Calculation calculation = new Calculation { MathExpression = input, Result = result, UserId = client.Id };
 
-                    context.Calculations.Add(calculation);
-                    context.SaveChanges();
+                        context.Calculations.Add(calculation);
+                        context.SaveChanges();
 
-                    CallBack.Equals(result);
+                        CallBack.Equals(result);
 
-                    client.CalculationLimit--;
-                    context.SaveChanges();
+                        client.CalculationLimit--;
+                        context.SaveChanges();
+                    }
                 }
                 else
+                {
+                    if (client.CalculationLimit >= ChumakPrice)
+                    {
+                        CallBack.GetChumak(@"http://api.chumak.ml");
+                        client.CalculationLimit-= ChumakPrice;
+                        context.SaveChanges();
+                    }
+                }
+
+                if (client.CalculationLimit == 0)
                 {
                     CallBack.Reject("Your calculation limit reached! Please buy a license!");
                 }

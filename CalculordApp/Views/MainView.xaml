@@ -8,15 +8,23 @@
         xmlns:cal="http://www.caliburnproject.org"
         BorderBrush="Black"
         Title="Calculord"
-        Width="360" Height="390"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        dialogs:DialogParticipation.Register="{Binding}">
+        dialogs:DialogParticipation.Register="{Binding}"
+        Width="360" Height="390">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <cal:ActionMessage MethodName="SetConnection" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout x:Name="yourMahAppFlyout" Header="Your Chumak for today" 
+                             Position="Right" Width="360" IsOpen="{Binding IsOpenFlyOut}" Theme="Adapt">
+                <Image Source="{Binding ChumakForToday}" Width="340" Height="300"/>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="30*"/>
@@ -26,6 +34,7 @@
             <ColumnDefinition Width="60*"/>
             <ColumnDefinition Width="60*"/>
             <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="{Binding ColumnWidth}"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="15*"/>
