@@ -8,3 +8,15 @@ CalcuLord.NET.Tests/obj/
 Calculord/Release/
 Calculord/Debug/
 packages/
+CalculordApp/bin/
+CalculordApp/obj/
+CalculordDBLayer/obj/
+CalculordDBLayer/bin/
+CalculordServiceHost/bin/
+CalculordServiceHost/obj/
+CalculordServiceLib/bin/
+CalculordServiceLib/obj/
+Calculord.VC.VC.opendb
+Calculord.VC.db
+ipch/
+

@@ -30,4 +30,3 @@ namespace calculord
 
 	rxcalc* calculator;
 }
-

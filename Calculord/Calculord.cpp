@@ -86,4 +86,3 @@ extern "C" __declspec(dllexport) int __cdecl Calculate(const char* value, double
 		return 0;
 	}
 }
-
