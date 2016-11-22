@@ -1,17 +1,17 @@
 <Controls:MetroWindow x:Class="CalculordApp.Views.MainView"
                       x:Name="Calculord"
-        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:cal="http://www.caliburnproject.org"
-        BorderBrush="Black"
-        Title="Calculord"
-        ResizeMode="CanMinimize"
-        WindowStartupLocation="CenterScreen"
-        dialogs:DialogParticipation.Register="{Binding}"
-        Width="360" Height="390">
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+                      xmlns:cal="http://www.caliburnproject.org"
+                      BorderBrush="Black"
+                      Title="Calculord"
+                      ResizeMode="CanMinimize"
+                      WindowStartupLocation="CenterScreen"
+                      dialogs:DialogParticipation.Register="{Binding}"
+                      Width="360" Height="390">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <cal:ActionMessage MethodName="SetConnection" />
@@ -19,70 +19,84 @@
     </i:Interaction.Triggers>
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl>
-            <Controls:Flyout x:Name="yourMahAppFlyout" Header="Your Chumak for today" 
+            <Controls:Flyout x:Name="yourMahAppFlyout" Header="Your Chumak for today"
                              Position="Right" Width="360" IsOpen="{Binding IsOpenFlyOut}" Theme="Adapt">
-                <Image Source="{Binding ChumakForToday}" Width="340" Height="300"/>
+                <Image Source="{Binding ChumakForToday}" Width="340" Height="300" />
             </Controls:Flyout>
         </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="30*"/>
-            <ColumnDefinition Width="60*"/>
-            <ColumnDefinition Width="60*"/>
-            <ColumnDefinition Width="60*"/>
-            <ColumnDefinition Width="60*"/>
-            <ColumnDefinition Width="60*"/>
-            <ColumnDefinition Width="30*"/>
-            <ColumnDefinition Width="{Binding ColumnWidth}"/>
+            <ColumnDefinition Width="30*" />
+            <ColumnDefinition Width="60*" />
+            <ColumnDefinition Width="60*" />
+            <ColumnDefinition Width="60*" />
+            <ColumnDefinition Width="60*" />
+            <ColumnDefinition Width="60*" />
+            <ColumnDefinition Width="30*" />
+            <ColumnDefinition Width="{Binding ColumnWidth}" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="15*"/>
-            <RowDefinition Height="30*"/>
-            <RowDefinition Height="30*"/>
-            <RowDefinition Height="30*"/>
-            <RowDefinition Height="30*"/>
-            <RowDefinition Height="30*"/>
-            <RowDefinition Height="20*"/>
+            <RowDefinition Height="15*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="20*" />
         </Grid.RowDefinitions>
-        <TextBox x:Name="MathExpression" Grid.Row="1" 
+        <TextBox x:Name="MathExpression" Grid.Row="1"
                  Grid.ColumnSpan="7" VerticalContentAlignment="Center"
-                 Width="290" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="1" Grid.Row="2" Width="50" Height="50"
-                Content="7" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="2" Grid.Row="2" Width="50" Height="50"
-                Content="8" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="3" Grid.Row="2" Width="50" Height="50"
-                Content="9" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="4" Grid.Row="2" Width="50" Height="50"
-                Content="/" Style="{DynamicResource SquareButtonStyle}"/>
+                 Width="290" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="1"
+                Grid.Row="2" Width="50" Height="50"
+                Content="7" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="2"
+                Grid.Row="2" Width="50" Height="50"
+                Content="8" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="3"
+                Grid.Row="2" Width="50" Height="50"
+                Content="9" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="4"
+                Grid.Row="2" Width="50" Height="50"
+                Content="/" Style="{DynamicResource SquareButtonStyle}" />
         <Button x:Name="Clear" Grid.Column="5" Grid.Row="2" Width="50" Height="50"
-                Content="C" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="1" Grid.Row="3" Width="50" Height="50"
-                Content="4" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="2" Grid.Row="3" Width="50" Height="50"
-                Content="5" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="3" Grid.Row="3" Width="50" Height="50"
-                Content="6" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="4" Grid.Row="3" Width="50" Height="50"
-                Content="*" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button x:Name="Calculate" Grid.Column="5" 
+                Content="C" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="1"
+                Grid.Row="3" Width="50" Height="50"
+                Content="4" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="2"
+                Grid.Row="3" Width="50" Height="50"
+                Content="5" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="3"
+                Grid.Row="3" Width="50" Height="50"
+                Content="6" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="4"
+                Grid.Row="3" Width="50" Height="50"
+                Content="*" Style="{DynamicResource SquareButtonStyle}" />
+        <Button x:Name="Calculate" Grid.Column="5"
                 Grid.Row="3" Grid.RowSpan="3" Width="50" Height="160"
                 Content="=" Style="{DynamicResource SquareButtonStyle}" IsDefault="True" />
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="1" Grid.Row="4" Width="50" Height="50"
-                Content="3" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="2" Grid.Row="4" Width="50" Height="50"
-                Content="2" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="3" Grid.Row="4" Width="50" Height="50"
-                Content="1" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="4" Grid.Row="4" Width="50" Height="50"
-                Content="-" Style="{DynamicResource SquareButtonStyle}"/>
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="1"
+                Grid.Row="4" Width="50" Height="50"
+                Content="3" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="2"
+                Grid.Row="4" Width="50" Height="50"
+                Content="2" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="3"
+                Grid.Row="4" Width="50" Height="50"
+                Content="1" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="4"
+                Grid.Row="4" Width="50" Height="50"
+                Content="-" Style="{DynamicResource SquareButtonStyle}" />
         <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="1"
                 Grid.Row="5" Grid.ColumnSpan="2" Width="110" Height="50"
-                Content="0" Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="3" Grid.Row="5" Width="50" Height="50"
-                Content="." Style="{DynamicResource SquareButtonStyle}"/>
-        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="4" Grid.Row="5" Width="50" Height="50"
-                Content="+" Style="{DynamicResource SquareButtonStyle}"/>
+                Content="0" Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="3"
+                Grid.Row="5" Width="50" Height="50"
+                Content="." Style="{DynamicResource SquareButtonStyle}" />
+        <Button cal:Message.Attach="[Event Click] = [Action UpdateExpression($this.Content)]" Grid.Column="4"
+                Grid.Row="5" Width="50" Height="50"
+                Content="+" Style="{DynamicResource SquareButtonStyle}" />
     </Grid>
 </Controls:MetroWindow>

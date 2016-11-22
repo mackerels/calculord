@@ -1,14 +1,14 @@
-﻿using CalculordServiceLib;
-using System;
+﻿using System;
 using System.ServiceModel;
+using CalculordServiceLib;
 
 namespace CalculordServiceHost
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            using (ServiceHost serviceHost = new ServiceHost(typeof(CalculordService)))
+            using (var serviceHost = new ServiceHost(typeof(CalculordService)))
             {
                 serviceHost.Open();
                 Console.WriteLine("Press the Enter key to terminate service.");

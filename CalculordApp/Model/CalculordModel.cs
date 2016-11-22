@@ -1,6 +1,6 @@
-﻿using CalculordApp.CalculordServiceReference;
-using System;
+﻿using System;
 using System.ServiceModel;
+using CalculordApp.CalculordServiceReference;
 
 namespace CalculordApp.Model
 {
@@ -11,13 +11,8 @@ namespace CalculordApp.Model
 
         private CalculordModel()
         {
-           _proxy = new CalculordClient(new InstanceContext(this));
+            _proxy = new CalculordClient(new InstanceContext(this));
         }
-
-        public event Action<string> AuthorizationConfirmed;
-        public event Action<double> ResultReceived;
-        public event Action<string> CalculationRejected;
-        public event Action<string> ChumakReceived;
 
         public static CalculordModel Instance => _instance ?? (_instance = new CalculordModel());
 
@@ -36,16 +31,6 @@ namespace CalculordApp.Model
             CalculationRejected?.Invoke(msg);
         }
 
-        public void SetConnection(string id)
-        {
-            _proxy.SetConnection(id);
-        }
-
-        public void Calculate(string expression, string id)
-        {
-            _proxy.Calculate(expression, id);
-        }
-
         public void GetChumak(string img)
         {
             ChumakReceived?.Invoke(img);
@@ -54,6 +39,21 @@ namespace CalculordApp.Model
         public void Dispose()
         {
             _proxy.Close();
+        }
+
+        public event Action<string> AuthorizationConfirmed;
+        public event Action<double> ResultReceived;
+        public event Action<string> CalculationRejected;
+        public event Action<string> ChumakReceived;
+
+        public void SetConnection(string id)
+        {
+            _proxy.SetConnection(id);
+        }
+
+        public void Calculate(string expression, string id)
+        {
+            _proxy.Calculate(expression, id);
         }
     }
 }

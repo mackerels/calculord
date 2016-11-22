@@ -1,26 +1,27 @@
-using CalculordApp.Model;
-using Caliburn.Micro;
-using MahApps.Metro.Controls.Dialogs;
 using System.Configuration;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using CalculordApp.Model;
+using Caliburn.Micro;
+using MahApps.Metro.Controls.Dialogs;
+using Action = System.Action;
 
 namespace CalculordApp.ViewModels
 {
     public class MainViewModel : PropertyChangedBase, IMain
     {
-        private IDialogCoordinator _dialogService;
-        private string _mathExpression;
         private string _chumakForToday;
+        private readonly IDialogCoordinator _dialogService;
         private bool _isOpenFlyOut;
+        private string _mathExpression;
 
         public MainViewModel(IDialogCoordinator dialogService)
         {
             _dialogService = dialogService;
-         
+
             CalculordModel.Instance.AuthorizationConfirmed += SetConfiguration;
             CalculordModel.Instance.ResultReceived += ShowResult;
             CalculordModel.Instance.CalculationRejected += CancelCalculation;
@@ -75,9 +76,9 @@ namespace CalculordApp.ViewModels
         private async void CancelCalculation(string msg)
         {
             await _dialogService.ShowMessageAsync(this, "ERROR", msg);
-           
+
             await Application.Current.Dispatcher.BeginInvoke(
-                DispatcherPriority.Background, new System.Action(ShutdownApplication));
+                DispatcherPriority.Background, new Action(ShutdownApplication));
         }
 
         private void ShowChumak(string img)
@@ -89,30 +90,27 @@ namespace CalculordApp.ViewModels
         private async Task WaitForConnection()
         {
             var ProgressAlert = await _dialogService.ShowProgressAsync(this, "LOADING", "Please wait...");
-            ProgressAlert.SetIndeterminate(); 
+            ProgressAlert.SetIndeterminate();
 
             try
             {
-               await Task.Run(() => CalculordModel.Instance.SetConnection(ConfigurationManager.AppSettings["ClientId"]));
-               await ProgressAlert.CloseAsync();
-               await _dialogService.ShowMessageAsync(this, "HELLO!", "Welcome to Calculord Service!");
+                await
+                    Task.Run(() => CalculordModel.Instance.SetConnection(ConfigurationManager.AppSettings["ClientId"]));
+                await ProgressAlert.CloseAsync();
+                await _dialogService.ShowMessageAsync(this, "HELLO!", "Welcome to Calculord Service!");
             }
             catch
             {
-               await ProgressAlert.CloseAsync();
+                await ProgressAlert.CloseAsync();
 
-               MessageDialogResult res = 
-                    await _dialogService.ShowMessageAsync(this, "ERROR", 
-                    "Connection failed! Please try again!", MessageDialogStyle.AffirmativeAndNegative);
+                var res =
+                    await _dialogService.ShowMessageAsync(this, "ERROR",
+                        "Connection failed! Please try again!", MessageDialogStyle.AffirmativeAndNegative);
 
                 if (res == MessageDialogResult.Affirmative)
-                {
                     SetConnection();
-                }
                 else
-                {
                     ShutdownApplication();
-                }
             }
         }
 
@@ -148,17 +146,13 @@ namespace CalculordApp.ViewModels
                 (?(p)(?!))
                 $
             ");
-          
-            if (!string.IsNullOrEmpty(MathExpression) 
+
+            if (!string.IsNullOrEmpty(MathExpression)
                 && (regex.IsMatch(MathExpression)
-                || MathExpression == "chumak"))
-            {
+                    || (MathExpression == "chumak")))
                 CalculordModel.Instance.Calculate(MathExpression, ConfigurationManager.AppSettings["ClientId"]);
-            }
             else
-            {
                 await _dialogService.ShowMessageAsync(this, "ERROR", "Invalid input!");
-            }
         }
 
         public void DisplayChumak()

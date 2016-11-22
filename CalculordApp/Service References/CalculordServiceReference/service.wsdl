@@ -1,5 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CalculordService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+                  xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/"
+                  xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+                  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CalculordService"
+                  targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsp:Policy wsu:Id="NetTcpBinding_ICalculord_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -59,22 +72,27 @@
   </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="ICalculord">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SetConnection">
-      <wsdl:input wsaw:Action="http://tempuri.org/ICalculord/SetConnection" message="tns:ICalculord_SetConnection_InputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalculord/SetConnection"
+                  message="tns:ICalculord_SetConnection_InputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Calculate">
       <wsdl:input wsaw:Action="http://tempuri.org/ICalculord/Calculate" message="tns:ICalculord_Calculate_InputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Authorize">
-      <wsdl:output wsaw:Action="http://tempuri.org/ICalculord/Authorize" message="tns:ICalculord_Authorize_OutputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalculord/Authorize"
+                   message="tns:ICalculord_Authorize_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Equals">
-      <wsdl:output wsaw:Action="http://tempuri.org/ICalculord/Equals" message="tns:ICalculord_Equals_OutputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalculord/Equals"
+                   message="tns:ICalculord_Equals_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Reject">
-      <wsdl:output wsaw:Action="http://tempuri.org/ICalculord/Reject" message="tns:ICalculord_Reject_OutputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalculord/Reject"
+                   message="tns:ICalculord_Reject_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetChumak">
-      <wsdl:output wsaw:Action="http://tempuri.org/ICalculord/GetChumak" message="tns:ICalculord_GetChumak_OutputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalculord/GetChumak"
+                   message="tns:ICalculord_GetChumak_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ICalculord" type="tns:ICalculord">

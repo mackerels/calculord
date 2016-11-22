@@ -1,3 +1,6 @@
-namespace CalculordApp {
-    public interface IMain {}
+namespace CalculordApp
+{
+    public interface IMain
+    {
+    }
 }

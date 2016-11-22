@@ -3,7 +3,7 @@
 namespace CalculordServiceLib
 {
     [ServiceContract(SessionMode = SessionMode.Required,
-                 CallbackContract = typeof(ICalculordCallback))]
+         CallbackContract = typeof(ICalculordCallback))]
     public interface ICalculord
     {
         [OperationContract(IsOneWay = true)]

@@ -1,7 +1,7 @@
-﻿using CalculordDBLayer;
-using System;
+﻿using System;
 using System.Linq;
 using System.ServiceModel;
+using CalculordDBLayer;
 
 namespace CalculordServiceLib
 {
@@ -11,16 +11,13 @@ namespace CalculordServiceLib
         public static readonly int CalculationLimit = 10;
         public static readonly int ChumakPrice = 5;
         private readonly CalcuLord.NET.CalcuLord _calculator;
-       
+
         public CalculordService()
         {
             _calculator = new CalcuLord.NET.CalcuLord();
         }
 
-        private ICalculordCallback CallBack
-        {
-            get { return OperationContext.Current.GetCallbackChannel<ICalculordCallback>(); }
-        }
+        private ICalculordCallback CallBack => OperationContext.Current.GetCallbackChannel<ICalculordCallback>();
 
         public void SetConnection(string id)
         {
@@ -35,7 +32,7 @@ namespace CalculordServiceLib
                         identifier = Guid.NewGuid().ToString();
                     } while (context.Users.Any(u => u.Identifier == identifier));
 
-                    context.Users.Add(new User { Identifier = identifier, CalculationLimit = CalculationLimit });
+                    context.Users.Add(new User {Identifier = identifier, CalculationLimit = CalculationLimit});
                     context.SaveChanges();
                     CallBack.Authorize(identifier);
 
@@ -43,10 +40,8 @@ namespace CalculordServiceLib
                 }
                 else
                 {
-                    if(!context.Users.Any(u => u.Identifier == id))
-                    {
+                    if (!context.Users.Any(u => u.Identifier == id))
                         CallBack.Reject("You are a cheater! Please be fair!");
-                    }
                 }
             }
         }
@@ -55,14 +50,14 @@ namespace CalculordServiceLib
         {
             using (var context = new CalculordContext())
             {
-                User client = context.Users.Where(u => u.Identifier == id).First();
+                var client = context.Users.First(u => u.Identifier == id);
 
                 if (input != "chumak")
                 {
                     if (client.CalculationLimit > 0)
                     {
-                        double result = _calculator.Calculate(input);
-                        Calculation calculation = new Calculation { MathExpression = input, Result = result, UserId = client.Id };
+                        var result = _calculator.Calculate(input);
+                        var calculation = new Calculation {MathExpression = input, Result = result, UserId = client.Id};
 
                         context.Calculations.Add(calculation);
                         context.SaveChanges();
@@ -77,16 +72,14 @@ namespace CalculordServiceLib
                 {
                     if (client.CalculationLimit >= ChumakPrice)
                     {
-                        CallBack.GetChumak(@"http://api.chumak.ml");
-                        client.CalculationLimit-= ChumakPrice;
+                        CallBack.GetChumak(@"http://api.chumak.ml/daily");
+                        client.CalculationLimit -= ChumakPrice;
                         context.SaveChanges();
                     }
                 }
 
                 if (client.CalculationLimit == 0)
-                {
                     CallBack.Reject("Your calculation limit reached! Please buy a license!");
-                }
             }
         }
     }
